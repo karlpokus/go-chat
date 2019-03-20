@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"net"
-	"fmt"
 )
 
 type Storage map[net.Addr]net.Conn

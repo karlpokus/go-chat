@@ -1,10 +1,10 @@
 package main
 
 import (
-	"net"
 	"fmt"
-	"time"
 	"io"
+	"net"
+	"time"
 )
 
 var mux = NewMux()
