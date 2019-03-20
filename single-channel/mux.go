@@ -3,6 +3,7 @@ package main
 import (
 	"io"
 	"net"
+	"fmt"
 )
 
 type Storage map[net.Addr]net.Conn
@@ -14,12 +15,14 @@ type Mux struct {
 func (m *Mux) Add(conn net.Conn) {
 	m.ops <- func(s Storage) {
 		s[conn.RemoteAddr()] = conn
+		logConns(s)
 	}
 }
 
 func (m *Mux) Remove(conn net.Conn) {
 	m.ops <- func(s Storage) {
 		delete(s, conn.RemoteAddr())
+		logConns(s)
 	}
 }
 
@@ -53,4 +56,8 @@ func NewMux() *Mux {
 	return &Mux{
 		ops: make(chan func(Storage)),
 	}
+}
+
+func logConns(s Storage) { // debug
+	fmt.Printf("%d open connections\n", len(s))
 }
