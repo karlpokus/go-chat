@@ -41,7 +41,7 @@ func (m *Mux) BroadcastPeers(msg string, me net.Conn) {
 	m.ops <- func(s Storage) {
 		for addr, conn := range s {
 			if addr != me.RemoteAddr() {
-				io.WriteString(conn, formatMsg(conn.RemoteAddr().String(), msg))
+				io.WriteString(conn, formatMsg(me.RemoteAddr().String(), msg))
 			}
 		}
 	}
