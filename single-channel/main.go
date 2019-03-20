@@ -11,12 +11,12 @@ var mux = NewMux()
 
 func handler(conn net.Conn) {
 	defer conn.Close()
-
 	mux.Add(conn)
-	mux.BroadcastAll(fmt.Sprintf("%s joined the chat\n", conn.RemoteAddr().String()))
+	//mux.BroadcastAll(fmt.Sprintf("%s joined the chat\n", conn.RemoteAddr().String()))
+	//io.WriteString(conn, fmt.Sprintf("hello %s", conn.RemoteAddr().String()))
 
 	for {
-		conn.SetDeadline(time.Now().Add(15 * time.Second))
+		conn.SetDeadline(time.Now().Add(30 * time.Second))
 		var buf [128]byte
 		n, err := conn.Read(buf[:])
 		if err, ok := err.(net.Error); ok && err.Timeout() {
