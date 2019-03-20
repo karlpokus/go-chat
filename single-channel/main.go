@@ -4,6 +4,7 @@ import (
 	"net"
 	"fmt"
 	"time"
+	"io"
 )
 
 var mux = NewMux()
@@ -20,6 +21,11 @@ func handler(conn net.Conn) {
 		n, err := conn.Read(buf[:])
 		if err, ok := err.(net.Error); ok && err.Timeout() {
 			fmt.Printf("there was a timeout %s\n", err)
+			mux.Remove(conn)
+			return
+		}
+		if err == io.EOF {
+			fmt.Println("client disconnected")
 			mux.Remove(conn)
 			return
 		}
