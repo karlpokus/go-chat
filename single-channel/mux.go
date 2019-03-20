@@ -19,9 +19,10 @@ func (m *Mux) Add(conn net.Conn) {
 	}
 }
 
-func (m *Mux) Remove(conn net.Conn) {
+func (m *Mux) Remove(conn net.Conn, reason string) {
 	m.ops <- func(s Storage) {
 		delete(s, conn.RemoteAddr())
+		logRemoveReason(conn, reason)
 		logConns(s)
 	}
 }
@@ -60,4 +61,8 @@ func NewMux() *Mux {
 
 func logConns(s Storage) { // debug
 	fmt.Printf("%d open connections\n", len(s))
+}
+
+func logRemoveReason(conn net.Conn, reason string) {
+	fmt.Printf("%s %s\n", conn.RemoteAddr().String(), reason)
 }

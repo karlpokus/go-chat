@@ -20,13 +20,11 @@ func handler(conn net.Conn) {
 		var buf [128]byte
 		n, err := conn.Read(buf[:])
 		if err, ok := err.(net.Error); ok && err.Timeout() {
-			fmt.Printf("there was a timeout %s\n", err)
-			mux.Remove(conn)
+			mux.Remove(conn, "timed out")
 			return
 		}
 		if err == io.EOF {
-			fmt.Println("client disconnected")
-			mux.Remove(conn)
+			mux.Remove(conn, "disconnected")
 			return
 		}
 		if err != nil {
@@ -34,7 +32,6 @@ func handler(conn net.Conn) {
 			return
 		}
 		mux.BroadcastPeers(string(buf[:n]), conn)
-		//fmt.Println(buf[:n])
 	}
 }
 
