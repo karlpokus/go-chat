@@ -2,8 +2,8 @@ package main
 
 import (
 	"io"
-	"net"
 	"log"
+	"net"
 )
 
 type Mux struct {
@@ -43,8 +43,8 @@ func (m *Mux) loop() {
 
 func main() {
 	mux := &Mux{
-		add: make(chan net.Conn),
-		remove: make(chan net.Addr),
+		add:     make(chan net.Conn),
+		remove:  make(chan net.Addr),
 		sendMsg: make(chan string),
 	}
 	go mux.loop()
